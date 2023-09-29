@@ -13,10 +13,10 @@ const methodOverride = require('method-override');
 
 const ExpressError = require('./utils/expressError');
 
-
+const DB="mongodb+srv://rk007:rk007@cluster0.431vpds.mongodb.net/MernStack?retryWrites=true&w=majority";
 const helmet=require('helmet');
 const session = require('express-session');
-const MongoDBStore=require('connect-mongo')(session);
+
 const routes = require('./routes/campgrounds');
 const review = require('./routes/review');
 const userRoute=require('./routes/user');
@@ -25,25 +25,18 @@ const passport=require('passport');
 const localS=require('passport-local');
 const User=require('./models/user');
 const sanitize=require('express-mongo-sanitize');
-const dburl='mongodb://127.0.0.1:27017/yelp';
-mongoose.connect(dburl, { useNewUrlParser: true, useUnifiedTopology: true })
+
+mongoose.connect(DB, { useNewUrlParser: true, useUnifiedTopology: true ,useCreateIndex:true,useFindAndModify:false})
     .then(() => {
         console.log("Sucess");
     })
     .catch((e) => {
         console.log("Error");
     })
-const store=new MongoDBStore({
-    url:dburl,
-    secret:'ravi',
-    touchAfter:24*60*60
-});
-store.on('error',(e)=>{
-    console.log('Nya error',e);
-})
+
 const app = express();
 const s = ({
-    store,
+   
     name:'Ravi',
     secret: 'this',
     resave: false,
